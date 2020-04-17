@@ -42,8 +42,6 @@ def upload():
             }
             return jsonify(errordata=errordata)
 
-    # return render_template('upload.html', form = uploadform)
-
 
 # Please create all new routes and view functions above this route.
 # This route is now our catch all route for our VueJS single page
