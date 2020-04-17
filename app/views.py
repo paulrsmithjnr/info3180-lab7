@@ -42,7 +42,7 @@ def upload():
             }
             return jsonify(errordata=errordata)
 
-    return render_template('upload.html', form = uploadform)
+    # return render_template('upload.html', form = uploadform)
 
 
 # Please create all new routes and view functions above this route.
