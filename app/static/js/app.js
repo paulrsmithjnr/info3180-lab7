@@ -34,6 +34,12 @@ Vue.component('app-footer', {
 const uploadForm = Vue.component('upload-form', {
     template: `
         <div id="uploadFormDiv">
+            <div id = "message">
+                <p class="alert alert-success" v-if="outcome === 'success'" id = "success">Submitted Successfully!</p>
+                <ul class="alert alert-danger" v-if="outcome === 'failure'" id = "errors">
+                    <li v-for="error in errors" class="news__item"> {{ error }}</li>
+                </ul> 
+            </div>
             <form id="uploadForm" @submit.prevent="uploadPhoto" method="POST" enctype="multipart/form-data">
 
                   <div class="form-group">
@@ -50,12 +56,18 @@ const uploadForm = Vue.component('upload-form', {
             </form>
         </div>
     `,
+    data: function() {
+      return {
+        outcome: '',
+        errors: []
+      }
+    },
     methods: {
       uploadPhoto: function() {
 
         let uploadForm = document.getElementById('uploadForm');
         let form_data = new FormData(uploadForm);
-
+        let self = this;
         fetch("/api/upload", {
           method: 'POST',
           body: form_data,
@@ -69,8 +81,13 @@ const uploadForm = Vue.component('upload-form', {
           })
           .then(function (jsonResponse) {
             // display a success message
-            alert("Submitted!");
-            console.log(jsonResponse); 
+            console.log(jsonResponse);
+            if(jsonResponse.hasOwnProperty('errordata')) {
+              self.errors = jsonResponse.errordata.errors;
+              self.outcome = 'failure';
+            } else {
+              self.outcome = 'success';
+            }
           })
           .catch(function (error) {
             console.log(error);
